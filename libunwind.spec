@@ -1,12 +1,12 @@
 Summary:	libunwind - a (mostly) platform-independent unwind API
 Summary(pl):	libunwind - (prawie) niezale¿ne od platformy API do rozwijania
 Name:		libunwind
-Version:	0.98.3
-Release:	2
+Version:	0.98.4
+Release:	1
 License:	MIT
 Group:		Libraries
 Source0:	ftp://ftp.hpl.hp.com/pub/linux-ia64/%{name}-%{version}.tar.gz
-# Source0-md5:	e6daa3498b80c00888276fb5292f18bd
+# Source0-md5:	5ba6d6b92e4a6c84f9d986ea3cbeb5b3
 URL:		http://www.hpl.hp.com/research/linux/libunwind/
 %ifarch amd64
 BuildRequires:	sed >= 4.0
