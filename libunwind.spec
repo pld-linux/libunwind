@@ -9,7 +9,7 @@ Source0:	ftp://ftp.hpl.hp.com/pub/linux-ia64/%{name}-%{version}.tar.gz
 # Source0-md5:	5ba6d6b92e4a6c84f9d986ea3cbeb5b3
 URL:		http://www.hpl.hp.com/research/linux/libunwind/
 %ifarch amd64
-BuildRequires:	sed >= 4.0
+BuildRequires:	binutils >= 2:2.15.94.0.2.2
 %endif
 ExclusiveArch:	%{ix86} amd64 hppa ia64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -49,11 +49,6 @@ Statyczna biblioteka libunwind.
 
 %prep
 %setup -q
-
-%ifarch amd64
-# workaround - don't use protected due to gas/584
-sed -i -e 's/__attribute__((visibility ("protected")))//' include/internal.h
-%endif
 
 %build
 %configure
