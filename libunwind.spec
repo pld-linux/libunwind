@@ -8,6 +8,7 @@ Group:		Libraries
 Source0:	ftp://ftp.hpl.hp.com/pub/linux-ia64/%{name}-%{version}.tar.gz
 # Source0-md5:	e6daa3498b80c00888276fb5292f18bd
 URL:		http://www.hpl.hp.com/research/linux/libunwind/
+ExclusiveArch:	%{ix86} amd64 hppa ia64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
