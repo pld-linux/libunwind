@@ -8,10 +8,11 @@ Group:		Libraries
 Source0:	ftp://ftp.hpl.hp.com/pub/linux-ia64/%{name}-%{version}.tar.gz
 # Source0-md5:	a145a46003930b6382a11b125eef4cb4
 URL:		http://www.hpl.hp.com/research/linux/libunwind/
-%ifarch amd64
+%ifarch %{x8664}
 BuildRequires:	binutils >= 2:2.15.94.0.2.2
 %endif
-ExclusiveArch:	%{ix86} amd64 hppa ia64
+BuildRequires:	rpmbuild(macros) >= 1.213
+ExclusiveArch:	%{ix86} %{x8664} hppa ia64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
