@@ -7,6 +7,7 @@ License:	MIT
 Group:		Libraries
 Source0:	ftp://ftp.hpl.hp.com/pub/linux-ia64/%{name}-%{version}.tar.gz
 # Source0-md5:	a145a46003930b6382a11b125eef4cb4
+Patch0:		%{name}-gcc4.patch
 URL:		http://www.hpl.hp.com/research/linux/libunwind/
 %ifarch %{x8664}
 BuildRequires:	binutils >= 2:2.15.94.0.2.2
@@ -50,6 +51,7 @@ Statyczna biblioteka libunwind.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %configure
