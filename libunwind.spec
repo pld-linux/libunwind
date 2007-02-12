@@ -1,5 +1,5 @@
 Summary:	libunwind - a (mostly) platform-independent unwind API
-Summary(pl):	libunwind - (prawie) niezaleøne od platformy API do rozwijania
+Summary(pl.UTF-8):   libunwind - (prawie) niezale≈ºne od platformy API do rozwijania
 Name:		libunwind
 Version:	0.98.5
 Release:	1
@@ -21,32 +21,32 @@ The goal of the libunwind project is to define a portable and
 efficient C programming interface (API) to determine the call-chain
 of a program.
  
-%description -l pl
-Celem projektu libunwind jest zdefiniowanie przeno∂nego i wydajnego
-API w jÍzyku C do okre∂lania ≥aÒcucha wywo≥aÒ w programie.
+%description -l pl.UTF-8
+Celem projektu libunwind jest zdefiniowanie przeno≈õnego i wydajnego
+API w jƒôzyku C do okre≈õlania ≈Ça≈Ñcucha wywo≈Ça≈Ñ w programie.
 
 %package devel
 Summary:	Header files for libunwind library
-Summary(pl):	Pliki nag≥Ûwkowe biblioteki libunwind
+Summary(pl.UTF-8):   Pliki nag≈Ç√≥wkowe biblioteki libunwind
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Header files for libunwind library.
 
-%description devel -l pl
-Pliki nag≥Ûwkowe biblioteki libunwind.
+%description devel -l pl.UTF-8
+Pliki nag≈Ç√≥wkowe biblioteki libunwind.
 
 %package static
 Summary:	Static libunwind library
-Summary(pl):	Statyczna biblioteka libunwind
+Summary(pl.UTF-8):   Statyczna biblioteka libunwind
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static libunwind library.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczna biblioteka libunwind.
 
 %prep
