@@ -1,5 +1,5 @@
 Summary:	libunwind - a (mostly) platform-independent unwind API
-Summary(pl.UTF-8):   libunwind - (prawie) niezależne od platformy API do rozwijania
+Summary(pl.UTF-8):	libunwind - (prawie) niezależne od platformy API do rozwijania
 Name:		libunwind
 Version:	0.98.5
 Release:	1
@@ -27,7 +27,7 @@ API w języku C do określania łańcucha wywołań w programie.
 
 %package devel
 Summary:	Header files for libunwind library
-Summary(pl.UTF-8):   Pliki nagłówkowe biblioteki libunwind
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libunwind
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
@@ -39,7 +39,7 @@ Pliki nagłówkowe biblioteki libunwind.
 
 %package static
 Summary:	Static libunwind library
-Summary(pl.UTF-8):   Statyczna biblioteka libunwind
+Summary(pl.UTF-8):	Statyczna biblioteka libunwind
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
