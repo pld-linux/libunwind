@@ -1,17 +1,19 @@
 Summary:	libunwind - a (mostly) platform-independent unwind API
 Summary(pl.UTF-8):	libunwind - (prawie) niezależne od platformy API do rozwijania
 Name:		libunwind
-Version:	0.98.5
+Version:	0.98.6
 Release:	1
 License:	MIT
 Group:		Libraries
-Source0:	ftp://ftp.hpl.hp.com/pub/linux-ia64/%{name}-%{version}.tar.gz
-# Source0-md5:	a145a46003930b6382a11b125eef4cb4
-Patch0:		%{name}-gcc4.patch
-URL:		http://www.hpl.hp.com/research/linux/libunwind/
+Source0:	http://download.savannah.gnu.org/releases/libunwind/%{name}-%{version}.tar.gz
+# Source0-md5:	dbe360f4ffabfbaf937dccf2b383fff9
+URL:		http://www.nongnu.org/libunwind/
+BuildRequires:  autoconf
+BuildRequires:  automake
 %ifarch %{x8664}
 BuildRequires:	binutils >= 2:2.15.94.0.2.2
 %endif
+BuildRequires:  libtool
 BuildRequires:	rpmbuild(macros) >= 1.213
 ExclusiveArch:	%{ix86} %{x8664} hppa ia64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -51,9 +53,12 @@ Statyczna biblioteka libunwind.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
+%{__libtoolize}
+%{__aclocal}
+%{__autoconf}
+%{__automake}
 %configure
 %{__make}
 
