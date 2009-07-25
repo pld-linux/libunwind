@@ -1,12 +1,12 @@
 Summary:	libunwind - a (mostly) platform-independent unwind API
 Summary(pl.UTF-8):	libunwind - (prawie) niezależne od platformy API do rozwijania
 Name:		libunwind
-Version:	0.98.6
+Version:	0.99
 Release:	1
 License:	MIT
 Group:		Libraries
 Source0:	http://download.savannah.gnu.org/releases/libunwind/%{name}-%{version}.tar.gz
-# Source0-md5:	dbe360f4ffabfbaf937dccf2b383fff9
+# Source0-md5:	3e9ca08118e22165a7f07d01d61a2d0d
 URL:		http://www.nongnu.org/libunwind/
 BuildRequires:  autoconf
 BuildRequires:  automake >= 1.6
