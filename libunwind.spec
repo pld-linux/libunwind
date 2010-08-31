@@ -2,11 +2,12 @@ Summary:	libunwind - a (mostly) platform-independent unwind API
 Summary(pl.UTF-8):	libunwind - (prawie) niezależne od platformy API do rozwijania
 Name:		libunwind
 Version:	0.99
-Release:	1
+Release:	2
 License:	MIT
 Group:		Libraries
 Source0:	http://download.savannah.gnu.org/releases/libunwind/%{name}-%{version}.tar.gz
 # Source0-md5:	3e9ca08118e22165a7f07d01d61a2d0d
+Patch0:		%{name}-disable-setjmp.patch
 URL:		http://www.nongnu.org/libunwind/
 BuildRequires:  autoconf
 BuildRequires:  automake >= 1.6
@@ -64,6 +65,7 @@ Statyczna biblioteka libunwind.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %{__libtoolize}
@@ -91,19 +93,15 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS COPYING ChangeLog NEWS README TODO
 %attr(755,root,root) %{_libdir}/libunwind.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libunwind.so.7
-%attr(755,root,root) %{_libdir}/libunwind-setjmp.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libunwind-setjmp.so.0
 %attr(755,root,root) %{_libdir}/libunwind-%{asuf}.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libunwind-%{asuf}.so.7
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libunwind.so
-%attr(755,root,root) %{_libdir}/libunwind-setjmp.so
 %attr(755,root,root) %{_libdir}/libunwind-generic.so
 %attr(755,root,root) %{_libdir}/libunwind-%{asuf}.so
 %{_libdir}/libunwind.la
-%{_libdir}/libunwind-setjmp.la
 %{_libdir}/libunwind-%{asuf}.la
 # static-only
 %{_libdir}/libunwind-ptrace.a
@@ -116,6 +114,5 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libunwind.a
-%{_libdir}/libunwind-setjmp.a
 %{_libdir}/libunwind-generic.a
 %{_libdir}/libunwind-%{asuf}.a
