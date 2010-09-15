@@ -1,0 +1,33 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 090828-rpath.dpatch by Daigo Moriwaki <daigo@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: rpath should not be used
+## DP: http://wiki.debian.org/RpathIssue
+
+@DPATCH@
+diff -urNad libunwind-0.99~/configure.in libunwind-0.99/configure.in
+--- libunwind-0.99~/configure.in	2009-05-09 01:34:10.000000000 +0900
++++ libunwind-0.99/configure.in	2009-08-29 10:41:18.000000000 +0900
+@@ -17,10 +17,20 @@
+ AC_PROG_CXX
+ AC_PROG_INSTALL
+ AC_PROG_MAKE_SET
+-AM_PROG_LIBTOOL
++AC_PROG_LIBTOOL
+ AM_PROG_AS
+ AM_PROG_CC_C_O
+ 
++case ${host} in
++  *-pc-linux-gnu)
++    AC_MSG_RESULT([Fixing libtool for -rpath problems.])
++    sed < libtool > libtool-2 \
++    's/^hardcode_libdir_flag_spec.*$'/'hardcode_libdir_flag_spec=" -D__LIBTOOL_IS_A_FOOL__ "/'
++    mv libtool-2 libtool
++    chmod 755 libtool
++  ;;
++esac
++
+ dnl Checks for libraries.
+ AC_CHECK_LIB(uca, __uc_get_grs)
+ CHECK_ATOMIC_OPS

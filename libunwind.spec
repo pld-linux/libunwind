@@ -1,3 +1,4 @@
+%bcond_with 	tests
 Summary:	libunwind - a (mostly) platform-independent unwind API
 Summary(pl.UTF-8):	libunwind - (prawie) niezależne od platformy API do rozwijania
 Name:		libunwind
@@ -8,6 +9,7 @@ Group:		Libraries
 Source0:	http://download.savannah.gnu.org/releases/libunwind/%{name}-%{version}.tar.gz
 # Source0-md5:	3e9ca08118e22165a7f07d01d61a2d0d
 Patch0:		%{name}-disable-setjmp.patch
+Patch1:		%{name}-rpath.patch
 URL:		http://www.nongnu.org/libunwind/
 BuildRequires:  autoconf
 BuildRequires:  automake >= 1.6
@@ -66,6 +68,7 @@ Statyczna biblioteka libunwind.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 %{__libtoolize}
@@ -73,8 +76,11 @@ Statyczna biblioteka libunwind.
 %{__autoconf}
 %{__autoheader}
 %{__automake}
-%configure
+%configure \
+	CPPFLAGS="%{rpmcppflags} -fPIC"
 %{__make}
+
+%{?with_tests:%{__make} check}
 
 %install
 rm -rf $RPM_BUILD_ROOT
