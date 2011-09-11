@@ -1,25 +1,31 @@
-%bcond_with 	tests
+#
+# Conditional build:
+%bcond_with 	tests	# perform "make check" (fails randomly)
+#
 Summary:	libunwind - a (mostly) platform-independent unwind API
 Summary(pl.UTF-8):	libunwind - (prawie) niezależne od platformy API do rozwijania
 Name:		libunwind
-Version:	0.99
-Release:	2
+Version:	1.0
+Release:	1
 License:	MIT
 Group:		Libraries
 Source0:	http://download.savannah.gnu.org/releases/libunwind/%{name}-%{version}.tar.gz
-# Source0-md5:	3e9ca08118e22165a7f07d01d61a2d0d
-Patch0:		%{name}-disable-setjmp.patch
-Patch1:		%{name}-rpath.patch
+# Source0-md5:	7308c793c9a1fd7be6fa2c070438c516
+Patch0:		%{name}-rpath.patch
+Patch1:		%{name}-generic.patch
 URL:		http://www.nongnu.org/libunwind/
-BuildRequires:  autoconf
-BuildRequires:  automake >= 1.6
+BuildRequires:	autoconf
+BuildRequires:	automake >= 1.6
 %ifarch %{x8664}
 BuildRequires:	binutils >= 2:2.15.94.0.2.2
 %endif
-BuildRequires:  libtool
+BuildRequires:	libtool
 BuildRequires:	rpmbuild(macros) >= 1.213
-ExclusiveArch:	%{ix86} %{x8664} hppa ia64
+ExclusiveArch:	%{ix86} %{x8664} arm hppa ia64 mips ppc ppc64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# some setjmp tricks expect non-redirected functions
+%define		filterout_cpp	-D_FORTIFY_SOURCE=[0-9]+
 
 # x86/x86_64/hppa/ia64
 %ifarch	%{ix86}
@@ -76,8 +82,9 @@ Statyczna biblioteka libunwind.
 %{__autoconf}
 %{__autoheader}
 %{__automake}
+# what needs additional -fPIC? libtool already uses it for shared objects
 %configure \
-	CPPFLAGS="%{rpmcppflags} -fPIC"
+	CFLAGS="%{rpmcflags} -fPIC"
 %{__make}
 
 %{?with_tests:%{__make} check}
@@ -99,6 +106,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS COPYING ChangeLog NEWS README TODO
 %attr(755,root,root) %{_libdir}/libunwind.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libunwind.so.7
+%attr(755,root,root) %{_libdir}/libunwind-setjmp.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libunwind-setjmp.so.0
 %attr(755,root,root) %{_libdir}/libunwind-%{asuf}.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libunwind-%{asuf}.so.7
 
@@ -106,8 +115,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libunwind.so
 %attr(755,root,root) %{_libdir}/libunwind-generic.so
+%attr(755,root,root) %{_libdir}/libunwind-setjmp.so
 %attr(755,root,root) %{_libdir}/libunwind-%{asuf}.so
 %{_libdir}/libunwind.la
+%{_libdir}/libunwind-setjmp.la
 %{_libdir}/libunwind-%{asuf}.la
 # static-only
 %{_libdir}/libunwind-ptrace.a
@@ -121,4 +132,5 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_libdir}/libunwind.a
 %{_libdir}/libunwind-generic.a
+%{_libdir}/libunwind-setjmp.a
 %{_libdir}/libunwind-%{asuf}.a
