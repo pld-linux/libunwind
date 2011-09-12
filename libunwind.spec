@@ -5,12 +5,12 @@
 Summary:	libunwind - a (mostly) platform-independent unwind API
 Summary(pl.UTF-8):	libunwind - (prawie) niezależne od platformy API do rozwijania
 Name:		libunwind
-Version:	1.0
+Version:	1.0.1
 Release:	1
 License:	MIT
 Group:		Libraries
 Source0:	http://download.savannah.gnu.org/releases/libunwind/%{name}-%{version}.tar.gz
-# Source0-md5:	7308c793c9a1fd7be6fa2c070438c516
+# Source0-md5:	993e47cca7315e22239c3e0d987e94e0
 Patch0:		%{name}-rpath.patch
 Patch1:		%{name}-generic.patch
 URL:		http://www.nongnu.org/libunwind/
@@ -105,11 +105,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING ChangeLog NEWS README TODO
 %attr(755,root,root) %{_libdir}/libunwind.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libunwind.so.7
+%attr(755,root,root) %ghost %{_libdir}/libunwind.so.8
 %attr(755,root,root) %{_libdir}/libunwind-setjmp.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libunwind-setjmp.so.0
 %attr(755,root,root) %{_libdir}/libunwind-%{asuf}.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libunwind-%{asuf}.so.7
+%attr(755,root,root) %ghost %{_libdir}/libunwind-%{asuf}.so.8
 
 %files devel
 %defattr(644,root,root,755)
