@@ -5,23 +5,23 @@
 Summary:	libunwind - a (mostly) platform-independent unwind API
 Summary(pl.UTF-8):	libunwind - (prawie) niezależne od platformy API do rozwijania
 Name:		libunwind
-Version:	1.0.1
+Version:	1.1
 Release:	1
 License:	MIT
 Group:		Libraries
 Source0:	http://download.savannah.gnu.org/releases/libunwind/%{name}-%{version}.tar.gz
-# Source0-md5:	993e47cca7315e22239c3e0d987e94e0
-Patch0:		%{name}-rpath.patch
-Patch1:		%{name}-generic.patch
+# Source0-md5:	fb4ea2f6fbbe45bf032cd36e586883ce
+Patch0:		%{name}-link.patch
 URL:		http://www.nongnu.org/libunwind/
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake >= 1.6
 %ifarch %{x8664}
 BuildRequires:	binutils >= 2:2.15.94.0.2.2
 %endif
-BuildRequires:	libtool
+BuildRequires:	libtool >= 2:2.0
 BuildRequires:	rpmbuild(macros) >= 1.213
-ExclusiveArch:	%{ix86} %{x8664} arm hppa ia64 mips ppc ppc64
+BuildRequires:	xz-devel
+ExclusiveArch:	%{ix86} %{x8664} arm hppa ia64 mips ppc ppc64 sh
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # some setjmp tricks expect non-redirected functions
@@ -52,6 +52,7 @@ Summary:	Header files for libunwind library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libunwind
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	xz-devel
 
 %description devel
 Header files for libunwind library.
@@ -74,7 +75,6 @@ Statyczna biblioteka libunwind.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
 
 %build
 %{__libtoolize}
@@ -106,6 +106,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS COPYING ChangeLog NEWS README TODO
 %attr(755,root,root) %{_libdir}/libunwind.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libunwind.so.8
+%attr(755,root,root) %{_libdir}/libunwind-coredump.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libunwind-coredump.so.0
+%attr(755,root,root) %{_libdir}/libunwind-ptrace.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libunwind-ptrace.so.0
 %attr(755,root,root) %{_libdir}/libunwind-setjmp.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libunwind-setjmp.so.0
 %attr(755,root,root) %{_libdir}/libunwind-%{asuf}.so.*.*.*
@@ -114,16 +118,23 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libunwind.so
+%attr(755,root,root) %{_libdir}/libunwind-coredump.so
 %attr(755,root,root) %{_libdir}/libunwind-generic.so
+%attr(755,root,root) %{_libdir}/libunwind-ptrace.so
 %attr(755,root,root) %{_libdir}/libunwind-setjmp.so
 %attr(755,root,root) %{_libdir}/libunwind-%{asuf}.so
 %{_libdir}/libunwind.la
+%{_libdir}/libunwind-coredump.la
+%{_libdir}/libunwind-ptrace.la
 %{_libdir}/libunwind-setjmp.la
 %{_libdir}/libunwind-%{asuf}.la
-# static-only
-%{_libdir}/libunwind-ptrace.a
 %{_includedir}/libunwind*.h
 %{_includedir}/unwind.h
+%{_pkgconfigdir}/libunwind.pc
+%{_pkgconfigdir}/libunwind-coredump.pc
+%{_pkgconfigdir}/libunwind-generic.pc
+%{_pkgconfigdir}/libunwind-ptrace.pc
+%{_pkgconfigdir}/libunwind-setjmp.pc
 %{_mandir}/man3/_U_dyn_*.3*
 %{_mandir}/man3/libunwind*.3*
 %{_mandir}/man3/unw_*.3*
@@ -131,6 +142,8 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libunwind.a
+%{_libdir}/libunwind-coredump.a
 %{_libdir}/libunwind-generic.a
+%{_libdir}/libunwind-ptrace.a
 %{_libdir}/libunwind-setjmp.a
 %{_libdir}/libunwind-%{asuf}.a
