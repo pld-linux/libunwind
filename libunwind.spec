@@ -1,16 +1,17 @@
 #
 # Conditional build:
 %bcond_with 	tests	# perform "make check" (fails randomly)
+%bcond_with	doc
 #
 Summary:	libunwind - a (mostly) platform-independent unwind API
 Summary(pl.UTF-8):	libunwind - (prawie) niezależne od platformy API do rozwijania
 Name:		libunwind
-Version:	1.1
+Version:	1.2.1
 Release:	1
 License:	MIT
 Group:		Libraries
 Source0:	http://download.savannah.gnu.org/releases/libunwind/%{name}-%{version}.tar.gz
-# Source0-md5:	fb4ea2f6fbbe45bf032cd36e586883ce
+# Source0-md5:	06ba9e60d92fd6f55cd9dadb084df19e
 Patch0:		%{name}-link.patch
 URL:		http://www.nongnu.org/libunwind/
 BuildRequires:	autoconf >= 2.50
@@ -18,6 +19,7 @@ BuildRequires:	automake >= 1.6
 %ifarch %{x8664}
 BuildRequires:	binutils >= 2:2.15.94.0.2.2
 %endif
+%{?with_doc:BuildRequires:	texlive-latex2man}
 BuildRequires:	libtool >= 2:2.0
 BuildRequires:	rpmbuild(macros) >= 1.213
 BuildRequires:	xz-devel
@@ -135,9 +137,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/libunwind-generic.pc
 %{_pkgconfigdir}/libunwind-ptrace.pc
 %{_pkgconfigdir}/libunwind-setjmp.pc
+%if %{with doc}
 %{_mandir}/man3/_U_dyn_*.3*
 %{_mandir}/man3/libunwind*.3*
 %{_mandir}/man3/unw_*.3*
+%endif
 
 %files static
 %defattr(644,root,root,755)
