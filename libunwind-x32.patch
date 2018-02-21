@@ -1,0 +1,13 @@
+--- libunwind-1.2.1/src/x86_64/Gos-linux.c.orig	2017-06-15 23:26:53.000000000 +0200
++++ libunwind-1.2.1/src/x86_64/Gos-linux.c	2018-02-21 20:52:26.940974303 +0100
+@@ -143,8 +143,8 @@
+ 
+   Debug (8, "resuming at ip=%llx via sigreturn(%p)\n",
+              (unsigned long long) c->dwarf.ip, sc);
+-  __asm__ __volatile__ ("mov %0, %%rsp;"
+-                        "mov %1, %%rax;"
++  __asm__ __volatile__ ("mov %q0, %%rsp;"
++                        "mov %q1, %%rax;"
+                         "syscall"
+                         :: "r"(sc), "i"(SYS_rt_sigreturn)
+                         : "memory");
