@@ -1,13 +1,13 @@
 #
 # Conditional build:
 %bcond_with 	tests	# perform "make check" (fails randomly)
-%bcond_with	doc
+%bcond_without	doc	# man pages
 #
 Summary:	libunwind - a (mostly) platform-independent unwind API
 Summary(pl.UTF-8):	libunwind - (prawie) niezależne od platformy API do rozwijania
 Name:		libunwind
 Version:	1.2.1
-Release:	2
+Release:	3
 License:	MIT
 Group:		Libraries
 Source0:	http://download.savannah.gnu.org/releases/libunwind/%{name}-%{version}.tar.gz
@@ -20,7 +20,7 @@ BuildRequires:	automake >= 1.6
 %ifarch %{x8664}
 BuildRequires:	binutils >= 2:2.15.94.0.2.2
 %endif
-%{?with_doc:BuildRequires:	texlive-latex2man}
+%{?with_doc:BuildRequires:	latex2man}
 BuildRequires:	libtool >= 2:2.0
 BuildRequires:	rpmbuild(macros) >= 1.213
 BuildRequires:	xz-devel
@@ -88,7 +88,8 @@ Statyczna biblioteka libunwind.
 %{__automake}
 # what needs additional -fPIC? libtool already uses it for shared objects
 %configure \
-	CFLAGS="%{rpmcflags} -fPIC"
+	CFLAGS="%{rpmcflags} -fPIC" \
+	%{!?with_doc:--disable-documentation}
 %{__make}
 
 %{?with_tests:%{__make} check}
