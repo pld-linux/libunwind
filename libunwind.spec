@@ -6,12 +6,12 @@
 Summary:	libunwind - a (mostly) platform-independent unwind API
 Summary(pl.UTF-8):	libunwind - (prawie) niezależne od platformy API do rozwijania
 Name:		libunwind
-Version:	1.2.1
-Release:	3
+Version:	1.3.1
+Release:	1
 License:	MIT
 Group:		Libraries
 Source0:	http://download.savannah.gnu.org/releases/libunwind/%{name}-%{version}.tar.gz
-# Source0-md5:	06ba9e60d92fd6f55cd9dadb084df19e
+# Source0-md5:	a04f69d66d8e16f8bf3ab72a69112cd6
 Patch0:		%{name}-link.patch
 Patch1:		%{name}-x32.patch
 URL:		http://www.nongnu.org/libunwind/
@@ -24,7 +24,7 @@ BuildRequires:	binutils >= 2:2.15.94.0.2.2
 BuildRequires:	libtool >= 2:2.0
 BuildRequires:	rpmbuild(macros) >= 1.213
 BuildRequires:	xz-devel
-ExclusiveArch:	%{ix86} %{x8664} x32 %{arm} hppa ia64 mips ppc ppc64 sh
+ExclusiveArch:	%{ix86} %{x8664} x32 %{arm} aarch64 hppa ia64 mips ppc ppc64 sh tilegx
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # some setjmp tricks expect non-redirected functions
