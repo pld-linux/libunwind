@@ -37,7 +37,11 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %ifarch	%{x8664} x32
 %define	asuf	x86_64
 %else
+%ifarch	%{arm}
+%define	asuf	arm
+%else
 %define	asuf	%{_target_cpu}
+%endif
 %endif
 %endif
 
