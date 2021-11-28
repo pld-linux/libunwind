@@ -9,5 +9,5 @@
 +  __asm__ __volatile__ ("mov %q0, %%rsp;"
 +                        "mov %q1, %%rax;"
                          "syscall"
-                         :: "r"(sc), "i"(SYS_rt_sigreturn)
+                         :: "r"((uint64_t)sc), "i"(SYS_rt_sigreturn)
                          : "memory");
