@@ -10,7 +10,7 @@ Version:	1.6.0
 Release:	1
 License:	MIT
 Group:		Libraries
-Source0:	http://download.savannah.gnu.org/releases/libunwind/%{name}-%{version}.tar.gz
+Source0:	https://download.savannah.gnu.org/releases/libunwind/%{name}-%{version}.tar.gz
 # Source0-md5:	76cb31ac581f21077797037c15baa3fa
 Patch0:		%{name}-link.patch
 Patch1:		%{name}-x32.patch
