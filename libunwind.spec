@@ -1,7 +1,8 @@
 #
 # Conditional build:
-%bcond_with 	tests	# perform "make check" (fails randomly)
-%bcond_without	doc	# man pages
+%bcond_with 	tests		# perform "make check" (fails randomly)
+%bcond_without	doc		# man pages
+%bcond_without	static_libs	# static libraries
 #
 Summary:	libunwind - a (mostly) platform-independent unwind API
 Summary(pl.UTF-8):	libunwind - (prawie) niezależne od platformy API do rozwijania
@@ -22,7 +23,7 @@ BuildRequires:	binutils >= 2:2.15.94.0.2.2
 %endif
 %{?with_doc:BuildRequires:	latex2man}
 BuildRequires:	libtool >= 2:2.0
-BuildRequires:	rpmbuild(macros) >= 1.213
+BuildRequires:	rpmbuild(macros) >= 1.527
 BuildRequires:	xz-devel
 ExclusiveArch:	%{ix86} %{x8664} x32 %{arm} aarch64 hppa ia64 mips ppc ppc64 sh tilegx
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -93,7 +94,8 @@ Statyczna biblioteka libunwind.
 # what needs additional -fPIC? libtool already uses it for shared objects
 %configure \
 	CFLAGS="%{rpmcflags} -fPIC" \
-	%{!?with_doc:--disable-documentation}
+	%{!?with_doc:--disable-documentation} \
+	%{__enable_disable static_libs static}
 %{__make}
 
 %{?with_tests:%{__make} check}
@@ -150,6 +152,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man3/unw_*.3*
 %endif
 
+%if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libunwind.a
@@ -158,3 +161,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libunwind-ptrace.a
 %{_libdir}/libunwind-setjmp.a
 %{_libdir}/libunwind-%{asuf}.a
+%endif
