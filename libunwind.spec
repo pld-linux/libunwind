@@ -7,7 +7,7 @@ Summary:	libunwind - a (mostly) platform-independent unwind API
 Summary(pl.UTF-8):	libunwind - (prawie) niezależne od platformy API do rozwijania
 Name:		libunwind
 Version:	1.6.2
-Release:	1
+Release:	2
 License:	MIT
 Group:		Libraries
 Source0:	https://download.savannah.gnu.org/releases/libunwind/%{name}-%{version}.tar.gz
@@ -49,7 +49,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 The goal of the libunwind project is to define a portable and
 efficient C programming interface (API) to determine the call-chain
 of a program.
- 
+
 %description -l pl.UTF-8
 Celem projektu libunwind jest zdefiniowanie przenośnego i wydajnego
 API w języku C do określania łańcucha wywołań w programie.
@@ -58,8 +58,8 @@ API w języku C do określania łańcucha wywołań w programie.
 Summary:	Header files for libunwind library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libunwind
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	xz-devel
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	xz-devel%{?_isa}
 
 %description devel
 Header files for libunwind library.
@@ -71,7 +71,7 @@ Pliki nagłówkowe biblioteki libunwind.
 Summary:	Static libunwind library
 Summary(pl.UTF-8):	Statyczna biblioteka libunwind
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
+Requires:	%{name}-devel%{?_isa} = %{version}-%{release}
 
 %description static
 Static libunwind library.
