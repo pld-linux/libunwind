@@ -124,7 +124,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/libunwind-setjmp.so.0
 %attr(755,root,root) %{_libdir}/libunwind-%{asuf}.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libunwind-%{asuf}.so.8
-%if %{with doc}
+%if %{with tests}
 %{_libexecdir}/libunwind
 %endif
 
