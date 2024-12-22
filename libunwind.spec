@@ -7,15 +7,14 @@
 Summary:	libunwind - a (mostly) platform-independent unwind API
 Summary(pl.UTF-8):	libunwind - (prawie) niezależne od platformy API do rozwijania
 Name:		libunwind
-Version:	1.6.2
-Release:	2
+Version:	1.8.1
+Release:	1
 License:	MIT
 Group:		Libraries
-Source0:	https://download.savannah.gnu.org/releases/libunwind/%{name}-%{version}.tar.gz
-# Source0-md5:	f625b6a98ac1976116c71708a73dc44a
-Patch0:		%{name}-link.patch
-Patch1:		%{name}-x32.patch
-URL:		http://www.nongnu.org/libunwind/
+Source0:	https://github.com/libunwind/libunwind/releases/download/v%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	10c96118ff30b88c9eeb6eac8e75599d
+Patch0:		%{name}-x32.patch
+URL:		https://github.com/libunwind/libunwind
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake >= 1.6
 %ifarch %{x8664}
@@ -83,7 +82,6 @@ Statyczna biblioteka libunwind.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
 
 %build
 %{__libtoolize}
@@ -95,6 +93,7 @@ Statyczna biblioteka libunwind.
 %configure \
 	CFLAGS="%{rpmcflags} -fPIC" \
 	%{!?with_doc:--disable-documentation} \
+	%{!?with_tests:--disable-tests} \
 	%{__enable_disable static_libs static}
 %{__make}
 
@@ -125,6 +124,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/libunwind-setjmp.so.0
 %attr(755,root,root) %{_libdir}/libunwind-%{asuf}.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libunwind-%{asuf}.so.8
+%if %{with doc}
+%{_libexecdir}/libunwind
+%endif
 
 %files devel
 %defattr(644,root,root,755)
