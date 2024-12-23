@@ -16,7 +16,7 @@ Source0:	https://github.com/libunwind/libunwind/releases/download/v%{version}/%{
 Patch0:		%{name}-x32.patch
 URL:		https://github.com/libunwind/libunwind
 BuildRequires:	autoconf >= 2.50
-BuildRequires:	automake >= 1.6
+BuildRequires:	automake >= 1:1.11
 %ifarch %{x8664}
 BuildRequires:	binutils >= 2:2.15.94.0.2.2
 %endif
@@ -93,6 +93,7 @@ Statyczna biblioteka libunwind.
 %configure \
 	CFLAGS="%{rpmcflags} -fPIC" \
 	%{!?with_doc:--disable-documentation} \
+	--disable-silent-rules \
 	%{!?with_tests:--disable-tests} \
 	%{__enable_disable static_libs static}
 %{__make}
