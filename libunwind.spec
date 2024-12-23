@@ -106,6 +106,11 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+%if %{with tests}
+# don't package test stuff
+%{__rm} -r $RPM_BUILD_ROOT%{_libexecdir}/libunwind
+%endif
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -125,9 +130,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/libunwind-setjmp.so.0
 %attr(755,root,root) %{_libdir}/libunwind-%{asuf}.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libunwind-%{asuf}.so.8
-%if %{with tests}
-%{_libexecdir}/libunwind
-%endif
 
 %files devel
 %defattr(644,root,root,755)
