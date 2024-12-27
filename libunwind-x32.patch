@@ -11,3 +11,110 @@
                          "syscall"
                          :: "r"((uint64_t)sc), "i"(SYS_rt_sigreturn)
                          : "memory");
+--- libunwind-1.8.1/src/elfxx.c.orig	2024-02-20 20:54:51.000000000 +0100
++++ libunwind-1.8.1/src/elfxx.c	2024-12-26 11:16:47.512432536 +0100
+@@ -819,10 +819,10 @@ elf_w (find_build_id_path) (const struct
+           const char prefix[] = "/usr/lib/debug/.build-id/";
+ 
+           /* See "man 5 elf" for notes about alignment in Nhdr */
+-          const Elf_W(Nhdr) *nhdr = (const ElfW(Nhdr) *) notes;
+-          const ElfW(Word) namesz = nhdr->n_namesz;
+-          const ElfW(Word) descsz = nhdr->n_descsz;
+-          const ElfW(Word) nameasz = UNW_ALIGN(namesz, 4); /* Aligned size */
++          const Elf_W(Nhdr) *nhdr = (const Elf_W(Nhdr) *) notes;
++          const Elf_W(Word) namesz = nhdr->n_namesz;
++          const Elf_W(Word) descsz = nhdr->n_descsz;
++          const Elf_W(Word) nameasz = UNW_ALIGN(namesz, 4); /* Aligned size */
+           const char *name = (const char *) (nhdr + 1);
+           const uint8_t *desc = (const uint8_t *) name + nameasz;
+           unsigned j;
+--- libunwind-1.8.1/include/tdep-x86_64/libunwind_i.h.orig	2024-02-20 20:54:51.000000000 +0100
++++ libunwind-1.8.1/include/tdep-x86_64/libunwind_i.h	2024-12-27 18:04:46.594569550 +0100
+@@ -36,7 +36,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DE
+ #include <stdatomic.h>
+ #include <libunwind.h>
+ 
++#ifdef __ILP32__
++#include "elf32.h"
++#else
+ #include "elf64.h"
++#endif
+ #include "mempool.h"
+ #include "dwarf.h"
+ 
+--- libunwind-1.8.1/configure.ac.orig	2024-02-20 20:54:51.000000000 +0100
++++ libunwind-1.8.1/configure.ac	2024-12-27 18:23:39.734249688 +0100
+@@ -368,8 +368,9 @@ AM_CONDITIONAL(OS_SOLARIS, expr x$target
+ 
+ AC_MSG_CHECKING([for ELF helper width])
+ AS_CASE([${target_arch}],
++	[x86_64], [AS_CASE([${target_os}], [linux-gnux32], [use_elf32=yes; AC_MSG_RESULT([32])], [use_elf64=yes; AC_MSG_RESULT([64])])],
+         [arm|hppa|ppc32|x86|sh],           [use_elf32=yes; AC_MSG_RESULT([32])],
+-        [aarch64|ia64|ppc64|x86_64|s390x], [use_elf64=yes; AC_MSG_RESULT([64])],
++        [aarch64|ia64|ppc64|s390x], [use_elf64=yes; AC_MSG_RESULT([64])],
+         [mips|riscv|loongarch64],          [use_elfxx=yes; AC_MSG_RESULT([xx])],
+         [AC_MSG_ERROR([Unknown ELF target: ${target_arch}])]
+ )
+--- libunwind-1.8.1/include/libunwind-x86_64.h.orig	2024-02-20 20:54:51.000000000 +0100
++++ libunwind-1.8.1/include/libunwind-x86_64.h	2024-12-27 19:18:05.193523408 +0100
+@@ -53,8 +53,13 @@ extern "C" {
+    want to err on making it rather too big than too small.  */
+ #define UNW_TDEP_CURSOR_LEN     127
+ 
++#ifdef __ILP32__
++typedef uint32_t unw_word_t;
++typedef int32_t unw_sword_t;
++#else
+ typedef uint64_t unw_word_t;
+ typedef int64_t unw_sword_t;
++#endif
+ 
+ typedef long double unw_tdep_fpreg_t;
+ 
+--- libunwind-1.8.1/src/x86_64/Ginit.c.orig	2024-02-20 20:54:51.000000000 +0100
++++ libunwind-1.8.1/src/x86_64/Ginit.c	2024-12-27 19:23:41.555679837 +0100
+@@ -165,7 +165,7 @@ get_static_proc_name (unw_addr_space_t a
+                       char *buf, size_t buf_len, unw_word_t *offp,
+                       void *arg UNUSED)
+ {
+-  return _Uelf64_get_proc_name (as, getpid (), ip, buf, buf_len, offp);
++  return elf_w(get_proc_name) (as, getpid (), ip, buf, buf_len, offp);
+ }
+ 
+ static int
+@@ -173,7 +173,7 @@ get_static_elf_filename (unw_addr_space_
+                          char *buf, size_t buf_len, unw_word_t *offp,
+                          void *arg UNUSED)
+ {
+-  return _Uelf64_get_elf_filename (as, getpid (), ip, buf, buf_len, offp);
++  return elf_w(get_elf_filename) (as, getpid (), ip, buf, buf_len, offp);
+ }
+ 
+ HIDDEN void
+--- libunwind-1.8.1/src/Makefile.am.orig	2024-02-21 14:39:50.000000000 +0100
++++ libunwind-1.8.1/src/Makefile.am	2024-12-27 20:13:28.032346689 +0100
+@@ -1212,8 +1212,12 @@ libunwind_x86_64_la_LDFLAGS =
+ 	-version-info $(SOVERSION)
+ libunwind_x86_64_la_LIBADD =                   \
+ 	libunwind-dwarf-generic.la             \
+-	libunwind-elf64.la                     \
+ 	$(libunwind_libadd)
++if USE_ELF32
++libunwind_x86_64_la_LIBADD += libunwind-elf32.la
++else
++libunwind_x86_64_la_LIBADD += libunwind-elf64.la
++endif
+ 
+ if REMOTE_ONLY
+ install-exec-hook:
+--- libunwind-1.8.1/tests/Gx64-test-dwarf-expressions.c.orig	2024-02-20 20:54:51.000000000 +0100
++++ libunwind-1.8.1/tests/Gx64-test-dwarf-expressions.c	2024-12-27 20:37:36.867647438 +0100
+@@ -40,7 +40,7 @@ extern int64_t recover_register(int64_t
+         panic("%s: unw_get_reg failed to locate the program counter", __FUNCTION__);
+     }
+   // We're now at the required height, extract register
+-  uint64_t value;
++  unw_word_t value;
+   if ((rc = unw_get_reg(&cursor, (unw_regnum_t) regnum, &value)) != 0)
+     panic("%s: unw_get_reg failed to retrieve register %lu", __FUNCTION__, regnum);
+   return value;
