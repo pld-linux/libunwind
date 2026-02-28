@@ -1,18 +1,18 @@
 #
 # Conditional build:
-%bcond_with 	tests		# perform "make check" (fails randomly)
+%bcond_with 	tests		# test suite (fails randomly)
 %bcond_without	doc		# man pages
 %bcond_without	static_libs	# static libraries
 #
 Summary:	libunwind - a (mostly) platform-independent unwind API
 Summary(pl.UTF-8):	libunwind - (prawie) niezależne od platformy API do rozwijania
 Name:		libunwind
-Version:	1.8.1
+Version:	1.8.3
 Release:	1
 License:	MIT
 Group:		Libraries
 Source0:	https://github.com/libunwind/libunwind/releases/download/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	10c96118ff30b88c9eeb6eac8e75599d
+# Source0-md5:	13bc7b41462ac6ea157d350eaf6c1503
 Patch0:		%{name}-x32.patch
 URL:		https://github.com/libunwind/libunwind
 BuildRequires:	autoconf >= 2.50
@@ -85,7 +85,7 @@ Statyczna biblioteka libunwind.
 
 %build
 %{__libtoolize}
-%{__aclocal}
+%{__aclocal} -I m4
 %{__autoconf}
 %{__autoheader}
 %{__automake}
@@ -106,6 +106,9 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+# obsoleted by pkg-config
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libunwind*.la
+
 %if %{with tests}
 # don't package test stuff
 %{__rm} -r $RPM_BUILD_ROOT%{_libexecdir}/libunwind
@@ -120,30 +123,25 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING ChangeLog NEWS README TODO
-%attr(755,root,root) %{_libdir}/libunwind.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libunwind.so.8
-%attr(755,root,root) %{_libdir}/libunwind-coredump.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libunwind-coredump.so.0
-%attr(755,root,root) %{_libdir}/libunwind-ptrace.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libunwind-ptrace.so.0
-%attr(755,root,root) %{_libdir}/libunwind-setjmp.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libunwind-setjmp.so.0
-%attr(755,root,root) %{_libdir}/libunwind-%{asuf}.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libunwind-%{asuf}.so.8
+%{_libdir}/libunwind.so.*.*.*
+%ghost %{_libdir}/libunwind.so.8
+%{_libdir}/libunwind-coredump.so.*.*.*
+%ghost %{_libdir}/libunwind-coredump.so.0
+%{_libdir}/libunwind-ptrace.so.*.*.*
+%ghost %{_libdir}/libunwind-ptrace.so.0
+%{_libdir}/libunwind-setjmp.so.*.*.*
+%ghost %{_libdir}/libunwind-setjmp.so.0
+%{_libdir}/libunwind-%{asuf}.so.*.*.*
+%ghost %{_libdir}/libunwind-%{asuf}.so.8
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libunwind.so
-%attr(755,root,root) %{_libdir}/libunwind-coredump.so
-%attr(755,root,root) %{_libdir}/libunwind-generic.so
-%attr(755,root,root) %{_libdir}/libunwind-ptrace.so
-%attr(755,root,root) %{_libdir}/libunwind-setjmp.so
-%attr(755,root,root) %{_libdir}/libunwind-%{asuf}.so
-%{_libdir}/libunwind.la
-%{_libdir}/libunwind-coredump.la
-%{_libdir}/libunwind-ptrace.la
-%{_libdir}/libunwind-setjmp.la
-%{_libdir}/libunwind-%{asuf}.la
+%{_libdir}/libunwind.so
+%{_libdir}/libunwind-coredump.so
+%{_libdir}/libunwind-generic.so
+%{_libdir}/libunwind-ptrace.so
+%{_libdir}/libunwind-setjmp.so
+%{_libdir}/libunwind-%{asuf}.so
 %{_includedir}/libunwind*.h
 %{_includedir}/unwind.h
 %{_pkgconfigdir}/libunwind.pc
